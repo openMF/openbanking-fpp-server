@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-//@RequestMapping(path = "/aisp/v1/")
 public class TransactionsController extends WSO2Controller {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionsController.class);
 

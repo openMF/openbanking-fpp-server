@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -63,9 +65,9 @@ public class HttpHelper {
             inputStream = conn.getErrorStream();
         }
 
-        final StringBuilder  response = new StringBuilder(4096);
-        final BufferedReader br       = new BufferedReader(new InputStreamReader(inputStream));
-        String               line;
+        final StringBuilder response = new StringBuilder(4096);
+        final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
         while (null != (line = br.readLine())) {
             response.append(line);
         }
@@ -84,7 +86,7 @@ public class HttpHelper {
      */
     public static @NotNull HttpResponse doAPICall(final HttpMethod httpMethod, final URL url,
                                                   final Map<String, String> headerParams,
-                                                  @Nullable final String jsonContentData) {
+                                                  @Nullable final String jsonContentData) throws ResponseStatusException {
         final HttpResponse httpResponse = new HttpResponse();
         for (int trycount = HttpHelper.CONNECTION_REFUSED_TRYCOUNT; 0 < trycount--; ) {
             try {
@@ -132,7 +134,7 @@ public class HttpHelper {
                         // DO NOTHING
                     }
                 } else {
-                    throw new APICallException("Connection refused");
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Connection refused", ce);
                 }
             } catch (final IOException e) {
                 httpResponse.setHttpResponseCode(-1);

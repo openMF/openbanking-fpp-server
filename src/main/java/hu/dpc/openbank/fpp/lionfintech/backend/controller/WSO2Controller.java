@@ -243,6 +243,7 @@ public class WSO2Controller {
      * @return
      */
     public String getOrCreateAccountConsentId(String bankId, String userName) {
+        userName = userName.toUpperCase();
         final String   accessToken    = getClientAccessToken(bankId, false);
         final BankInfo bankInfo       = getTokenManager(bankId).getOauthconfig().getBankInfo();
         AccountConsent accountConsent = accountConsentRepository.getConsent(bankId, userName);
@@ -278,10 +279,13 @@ public class WSO2Controller {
                     return null;
                 }
 
+                LOG.info("Found account consent in cache: {}", accountConsent.getConsentId());
                 accountConsentRepository.saveAndFlush(accountConsent);
             } else {
                 return null;
             }
+        } else {
+            LOG.info("Found account consent in cache: consentId={}", accountConsent.getConsentId());
         }
 
 
