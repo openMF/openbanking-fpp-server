@@ -46,7 +46,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/pisp/v1/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/pisp/v1/")
 public class DomesticPaymentsController extends WSO2Controller {
     private static final Logger       LOG    = LoggerFactory.getLogger(DomesticPaymentsController.class);
     private final static ObjectMapper mapper = new ObjectMapper();
@@ -130,7 +130,7 @@ public class DomesticPaymentsController extends WSO2Controller {
      * @param user
      * @return
      */
-    @PostMapping(path = "preparePayment")
+    @PostMapping(path = "preparePayment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OBWriteDomesticConsentResponse3> preparePayment(
             @RequestHeader(WSO2Controller.X_TPP_BANKID) final String bankId, @AuthenticationPrincipal final User user,
             @RequestBody final String body) {
@@ -166,7 +166,7 @@ public class DomesticPaymentsController extends WSO2Controller {
      * @param user
      * @return
      */
-    @PostMapping(path = "cancelPayment/{ConsentId}")
+    @PostMapping(path = "cancelPayment/{ConsentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> cancelPayment(@RequestHeader(WSO2Controller.X_TPP_BANKID) final String bankId,
                                                 @AuthenticationPrincipal final User user,
                                                 @PathVariable(CONSENT_ID) final String consentId) {
